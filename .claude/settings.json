@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(/Users/macbookpro/Documents/PROJECT/OrbitechCRM/backend/node_modules/.bin/tsc --noEmit --project /Users/macbookpro/Documents/PROJECT/OrbitechCRM/backend/tsconfig.json)"
+    ]
+  }
+}

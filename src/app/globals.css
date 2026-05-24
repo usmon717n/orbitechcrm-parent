@@ -1,0 +1,502 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Orbitech global accent token system. Runtime values are synced by ThemeProvider. */
+  --accent-source: #10b981;
+  --accent: hsl(160, 84%, 39%);
+  --accent-hover: hsl(160, 84%, 29%);
+  --accent-active: hsl(160, 84%, 21%);
+  --accent-soft: hsla(160, 84%, 39%, 0.11);
+  --accent-light: hsl(160, 69%, 54%);
+  --accent-muted: hsl(160, 54%, 67%);
+  --accent-subtle: hsla(160, 84%, 39%, 0.08);
+  --accent-border: hsl(160, 64%, 61%);
+  --accent-ring: hsla(160, 84%, 39%, 0.25);
+  --accent-glow: hsla(160, 84%, 39%, 0.12);
+  --accent-glow-strong: hsla(160, 84%, 39%, 0.25);
+  --accent-foreground: #ffffff;
+  --accent-gradient: linear-gradient(135deg, hsl(150, 84%, 39%), hsl(180, 74%, 49%));
+  --accent-gradient-soft: linear-gradient(135deg, hsla(150, 84%, 39%, 0.12), hsla(180, 74%, 49%, 0.08));
+  --gradient-start: hsl(150, 84%, 39%);
+  --gradient-end: hsl(180, 74%, 49%);
+  --accent-skeleton: hsl(160, 34%, 93%);
+  --selection-bg: hsla(160, 84%, 39%, 0.18);
+  --focus-ring: hsla(160, 84%, 39%, 0.28);
+  --chart-1: hsl(160, 84%, 39%);
+  --chart-2: hsl(184, 72%, 41%);
+  --chart-3: hsl(136, 68%, 47%);
+  --chart-4: hsl(206, 66%, 35%);
+  --chart-soft-1: hsla(160, 84%, 39%, 0.12);
+  --chart-soft-2: hsla(184, 72%, 41%, 0.1);
+
+  --color-primary-50: hsl(160, 84%, 97%);
+  --color-primary-100: hsl(160, 84%, 92%);
+  --color-primary-200: hsl(160, 84%, 84%);
+  --color-primary-300: hsl(160, 84%, 72%);
+  --color-primary-400: hsl(160, 84%, 60%);
+  --color-primary-500: hsl(160, 84%, 39%);
+  --color-primary-600: hsl(160, 84%, 31%);
+  --color-primary-700: hsl(160, 84%, 23%);
+  --color-primary-800: hsl(160, 84%, 15%);
+  --color-primary-900: hsl(160, 84%, 10%);
+  --color-primary-950: hsl(160, 84%, 7%);
+
+  --color-accent-50: var(--color-primary-50);
+  --color-accent-100: var(--color-primary-100);
+  --color-accent-200: var(--color-primary-200);
+  --color-accent-300: var(--color-primary-300);
+  --color-accent-400: var(--color-primary-400);
+  --color-accent-500: var(--color-primary-500);
+  --color-accent-600: var(--color-primary-600);
+  --color-accent-700: var(--color-primary-700);
+  --color-accent-800: var(--color-primary-800);
+  --color-accent-900: var(--color-primary-900);
+  --color-accent-950: var(--color-primary-950);
+
+  --shadow-primary: hsla(160, 84%, 39%, 0.25);
+  --shadow-primary-lg: hsla(160, 84%, 39%, 0.28);
+  --shadow-accent: hsla(160, 84%, 39%, 0.22);
+  --app-bg: hsl(160, 12%, 98%);
+  --app-bg-soft: hsl(160, 20%, 96%);
+  --app-bg-mist: hsl(184, 12%, 98%);
+  --app-bg-wash: hsla(160, 84%, 39%, 0.075);
+}
+
+@layer base {
+  .theme-transition,
+  .theme-transition * {
+    transition:
+      background-color 250ms ease,
+      color 250ms ease,
+      border-color 250ms ease,
+      box-shadow 250ms ease,
+      fill 250ms ease,
+      stroke 250ms ease,
+      opacity 250ms ease !important;
+  }
+  body {
+    @apply bg-surface-50 text-text-primary dark:bg-surface-950 dark:text-text-dark-primary;
+    background: var(--app-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .dark body {
+    background: var(--app-bg);
+  }
+  ::selection {
+    background: var(--selection-bg);
+  }
+  :where(input, textarea, select, button, a, [role='button']) {
+    accent-color: var(--accent);
+  }
+  :where(button, a, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  /* iOS safe area */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Prevent scroll bounce */
+  html {
+    overflow-x: hidden;
+  }
+  /* Better touch targets */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Browser Autofill Fix for Dark Mode */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #1e2a1a !important; /* Light mode default */
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px transparent;
+  }
+
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus,
+  .dark input:-webkit-autofill:active {
+    -webkit-text-fill-color: #e9f3e5 !important; /* Dark mode light text */
+  }
+}
+
+@layer components {
+  .navbar {
+    @apply border-b border-border/70 bg-surface-0/90 backdrop-blur-md dark:border-border-dark dark:bg-surface-900/85;
+  }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary dark:text-text-dark-secondary transition-all duration-200 cursor-pointer font-medium;
+    background: transparent;
+  }
+  .sidebar-link:hover {
+    background: var(--accent-subtle);
+    color: var(--accent);
+  }
+  .sidebar-link.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent-border), 0 12px 30px var(--accent-glow);
+  }
+  .card {
+    @apply bg-surface-0 dark:bg-surface-900 rounded-2xl p-4 md:p-6 shadow-sm border border-border/75 dark:border-border-dark;
+  }
+  .btn-primary {
+    @apply font-semibold px-5 py-3 md:py-2.5 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-surface-900;
+    background: var(--accent);
+    color: var(--accent-foreground);
+    box-shadow: 0 14px 32px var(--accent-glow);
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+  .btn-primary:active {
+    background: var(--accent-active);
+  }
+  .btn-secondary {
+    @apply bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 dark:hover:bg-surface-900 active:bg-surface-200 text-text-secondary dark:text-text-dark-secondary font-semibold px-5 py-3 md:py-2.5 rounded-xl transition-colors duration-200 min-h-[44px] border border-border/80 dark:border-border-dark focus-visible:outline-none focus-visible:ring-2;
+  }
+  .btn-outline {
+    @apply bg-transparent font-semibold px-5 py-3 md:py-2.5 rounded-xl transition-colors duration-200 min-h-[44px] focus-visible:outline-none focus-visible:ring-2;
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+  }
+  .btn-outline:hover {
+    background: var(--accent-subtle);
+  }
+  .btn-danger {
+    @apply bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold px-5 py-3 md:py-2.5 rounded-xl transition-colors duration-200 min-h-[44px];
+  }
+  .input {
+    @apply w-full border border-border dark:border-border-dark bg-surface-0 dark:bg-surface-900 text-text-primary dark:text-text-dark-primary placeholder:text-text-muted dark:placeholder:text-text-dark-muted rounded-xl px-4 py-3 md:py-2.5 text-sm focus:outline-none focus:ring-2 transition-all min-h-[44px] disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .input:focus {
+    border-color: var(--accent-border);
+    --tw-ring-color: var(--focus-ring);
+  }
+  .input-with-icon {
+    padding-left: 2.75rem;
+  }
+  .select {
+    @apply input appearance-none pr-10;
+  }
+  .checkbox {
+    @apply h-4 w-4 rounded border-border text-primary-600 focus:ring-primary dark:border-border-dark dark:bg-surface-900;
+  }
+  .radio {
+    @apply h-4 w-4 border-border text-primary-600 focus:ring-primary dark:border-border-dark dark:bg-surface-900;
+  }
+  .label {
+    @apply block text-sm font-medium text-text-secondary dark:text-text-dark-secondary mb-1.5;
+  }
+  .badge-green {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400;
+  }
+  .badge-red {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400;
+  }
+  .badge-yellow {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400;
+  }
+  .badge-gray {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-100 dark:bg-surface-800 text-text-secondary dark:text-text-dark-secondary;
+  }
+  .badge-primary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    background: var(--accent-subtle);
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+  }
+  .alert-info {
+    @apply rounded-xl px-4 py-3;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+  }
+  .alert-success {
+    @apply rounded-xl px-4 py-3;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+  }
+  .modal-panel {
+    @apply rounded-2xl border border-border/80 dark:border-border-dark bg-surface-0 dark:bg-surface-900 shadow-xl;
+  }
+  .table-header {
+    @apply px-4 py-3 text-left text-xs font-semibold text-text-muted dark:text-text-dark-muted uppercase tracking-wider;
+  }
+  .table-cell {
+    @apply px-4 py-3 text-sm text-text-secondary dark:text-text-dark-secondary;
+  }
+  .table-row {
+    @apply border-b border-border/70 dark:border-border-dark hover:bg-surface-50 dark:hover:bg-surface-800/70 transition-colors;
+  }
+  .table-row.is-selected,
+  .table-row[data-selected='true'] {
+    background: var(--accent-subtle);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .link {
+    @apply underline-offset-2 hover:underline;
+    color: var(--accent);
+  }
+  .pagination-item {
+    @apply inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-border/80 dark:border-border-dark bg-surface-0 dark:bg-surface-900 px-3 text-sm text-text-secondary dark:text-text-dark-secondary hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors;
+  }
+  .pagination-item.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-foreground);
+    box-shadow: 0 10px 24px var(--accent-glow);
+  }
+
+  .accent-surface {
+    background: var(--accent-subtle);
+    border-color: var(--accent-border);
+    color: var(--accent);
+  }
+
+  .accent-gradient {
+    background: var(--accent-gradient);
+    color: var(--accent-foreground);
+  }
+
+  .accent-glow {
+    box-shadow: 0 18px 48px var(--accent-glow-strong);
+  }
+  .form-section {
+    @apply rounded-2xl border border-border/80 dark:border-border-dark bg-surface-0 dark:bg-surface-900 p-4 md:p-5 space-y-4;
+  }
+
+  .upload-pill-shimmer {
+    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 55%, transparent 100%);
+    animation: uploadShimmer 1.6s linear infinite;
+  }
+
+  .upload-liquid-body {
+    background: linear-gradient(to top, rgba(175, 210, 255, 0.82), rgba(146, 191, 255, 0.58));
+  }
+
+  .upload-liquid-wave {
+    background: rgba(194, 221, 255, 0.82);
+    animation: uploadWave 1.5s linear infinite;
+  }
+
+  .upload-arrow-float {
+    animation: uploadArrowFloat 1s ease-in-out infinite;
+  }
+
+  .upload-success-pop {
+    animation: uploadSuccessPop 360ms ease-out;
+  }
+}
+
+@layer utilities {
+  .font-brand {
+    font-family: var(--font-brand), 'Montserrat', sans-serif;
+  }
+
+  /* Icon hover animations — play once on mouseenter, reset after */
+  .animate-icon-rise  { animation: icon-rise  540ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .animate-icon-shake { animation: icon-shake 500ms ease-in-out both; }
+  .animate-icon-tap   { animation: icon-tap   480ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .animate-icon-pop   { animation: icon-pop   420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+}
+
+@keyframes uploadShimmer {
+  0% { transform: translateX(-115%); }
+  100% { transform: translateX(115%); }
+}
+
+@keyframes uploadArrowFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes uploadWave {
+  0% { transform: translateX(-4%) rotate(0deg); }
+  50% { transform: translateX(4%) rotate(2deg); }
+  100% { transform: translateX(-4%) rotate(0deg); }
+}
+
+@keyframes uploadSuccessPop {
+  0% { transform: scale(0.75); opacity: 0.55; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+/* ── Summary card icon animations ───────────────────────────────────────── */
+
+/* TrendingUp — smooth upward float, like a chart line rising */
+@keyframes icon-rise {
+  0%   { transform: translateY(0px)  }
+  38%  { transform: translateY(-5px) }
+  65%  { transform: translateY(-2px) }
+  82%  { transform: translateY(-3px) }
+  100% { transform: translateY(0px)  }
+}
+
+/* AlertCircle — bell-style lateral shake, attention signal */
+@keyframes icon-shake {
+  0%, 100% { transform: rotate(0deg)   }
+  16%       { transform: rotate(-13deg) }
+  32%       { transform: rotate(11deg)  }
+  48%       { transform: rotate(-8deg)  }
+  64%       { transform: rotate(6deg)   }
+  80%       { transform: rotate(-3deg)  }
+  92%       { transform: rotate(1deg)   }
+}
+
+/* Wallet — press-down then elastic bounce up */
+@keyframes icon-tap {
+  0%   { transform: translateY(0px)  scaleY(1)    }
+  25%  { transform: translateY(3px)  scaleY(0.91) }
+  52%  { transform: translateY(-4px) scaleY(1.06) }
+  74%  { transform: translateY(-1px) scaleY(1.01) }
+  100% { transform: translateY(0px)  scaleY(1)    }
+}
+
+/* CheckCircle2 / TrendingDown — elastic scale pop, like a stamp */
+@keyframes icon-pop {
+  0%   { transform: scale(1)    }
+  35%  { transform: scale(1.24) }
+  58%  { transform: scale(0.88) }
+  78%  { transform: scale(1.07) }
+  100% { transform: scale(1)    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-icon-rise,
+  .animate-icon-shake,
+  .animate-icon-tap,
+  .animate-icon-pop {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-pill-shimmer,
+  .upload-liquid-wave,
+  .upload-arrow-float,
+  .upload-success-pop {
+    animation: none !important;
+  }
+}
+
+/* Dashboard (admin/teacher/student) panellarida tugmalarni bir xil oval (pill) uslubda ushlab turish */
+.panel-pill-ui button,
+.panel-pill-ui input[type='button'],
+.panel-pill-ui input[type='submit'],
+.panel-pill-ui a.btn-primary,
+.panel-pill-ui a.btn-secondary,
+.panel-pill-ui a.btn-danger {
+  border-radius: 9999px !important;
+}
+
+.panel-pill-ui button.no-pill,
+.panel-pill-ui button.card {
+  border-radius: 1rem !important;
+}
+
+@media (min-width: 1024px) {
+  /*
+    Compact desktop density: browser zoom emas, layoutning o'z spacing/font
+    ritmini ixchamlashtiramiz. Shunda sticky sidebar, fixed modal va dropdownlar
+    tabiiy ishlaydi.
+  */
+  .dashboard-desktop-density .dashboard-sidebar {
+    width: 14.75rem;
+  }
+
+  .dashboard-desktop-density .dashboard-sidebar > div:first-child {
+    padding: 1rem 1.25rem;
+  }
+
+  .dashboard-desktop-density .dashboard-sidebar nav {
+    padding: 1rem 0.75rem;
+  }
+
+  .dashboard-desktop-density .sidebar-link {
+    gap: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.2rem;
+  }
+
+  .dashboard-desktop-density .dashboard-sidebar .sidebar-link svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .dashboard-desktop-density .dashboard-topbar {
+    height: 3.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .dashboard-desktop-density .dashboard-topbar h1 {
+    font-size: 1rem;
+    line-height: 1.45rem;
+  }
+
+  .dashboard-desktop-density .dashboard-main {
+    padding: 1.15rem 1.25rem;
+  }
+
+  .dashboard-desktop-density .card {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .dashboard-desktop-density .table-header {
+    padding: 0.8rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .dashboard-desktop-density .table-cell {
+    padding: 0.8rem 1rem;
+    font-size: 0.86rem;
+  }
+
+  .dashboard-desktop-density .input {
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+  }
+
+  .dashboard-desktop-density .input.input-with-icon {
+    padding-left: 2.6rem;
+  }
+
+  .dashboard-desktop-density .btn-primary,
+  .dashboard-desktop-density .btn-secondary,
+  .dashboard-desktop-density .btn-outline,
+  .dashboard-desktop-density .btn-danger {
+    min-height: 2.5rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  /*
+    Browser zoom ishlatmasdan, desktopda UI ni ixchamlashtirish.
+    Bu usul sticky/fixed/dropdown joylashuvlarini buzmaydi.
+  */
+  .dashboard-desktop-density {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .dashboard-desktop-density {
+    font-size: 13px;
+  }
+}

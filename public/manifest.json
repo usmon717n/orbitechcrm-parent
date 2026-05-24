@@ -1,0 +1,17 @@
+{
+  "name": "Orbitech CRM",
+  "short_name": "Orbitech CRM",
+  "description": "Ta'lim markazi boshqaruv tizimi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#468432",
+  "icons": [
+    {
+      "src": "/logo/image-round.svg",
+      "sizes": "256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
