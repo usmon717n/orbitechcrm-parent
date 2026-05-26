@@ -62,6 +62,8 @@ export default function Navbar({ role }: NavbarProps) {
     { href: '/admin/games', label: t('nav.games'), icon: Gamepad2 },
     { href: '/admin/shop', label: t('nav.shop'), icon: ShoppingBag },
     { href: '/admin/statistics', label: t('nav.statistics'), icon: TrendingUp },
+    { href: '/admin/teacher-of-month', label: t('teacherOfMonth.navLabel', "Oy o'qituvchisi"), icon: GraduationCap },
+    { href: '/admin/notes', label: t('nav.notes'), icon: ClipboardList },
     { href: '/admin/support', label: t('nav.support'), icon: MessageSquareText },
     { href: '/admin/audit', label: t('nav.auditLog'), icon: Shield },
     { href: '/admin/settings', label: t('nav.settings'), icon: Settings },
@@ -72,15 +74,19 @@ export default function Navbar({ role }: NavbarProps) {
     { href: '/teacher/time', label: t('nav.time'), icon: Clock3 },
     { href: '/teacher/tests', label: t('nav.tests'), icon: FlaskConical },
     { href: '/teacher/notifications', label: t('nav.notifications'), icon: Bell },
+    { href: '/teacher/support', label: t('nav.support'), icon: MessageSquareText },
     { href: '/teacher/settings', label: t('nav.settings'), icon: Settings },
   ]
   const studentLinks = [
     { href: '/student', label: t('nav.home'), icon: Home },
     { href: '/student/groups', label: t('nav.myGroups'), icon: BookOpen },
+    { href: '/student/schedule', label: t('nav.schedule'), icon: Clock3 },
     { href: '/student/payments', label: t('nav.myPayments'), icon: CreditCard },
     { href: '/student/homework', label: t('nav.indicators'), icon: ClipboardList },
     { href: '/student/ratings', label: t('nav.ratings'), icon: Star },
     { href: '/student/extra', label: t('nav.extraLessons'), icon: PlusCircle },
+    { href: '/student/notifications', label: t('nav.notifications'), icon: Bell },
+    { href: '/student/support', label: t('nav.support'), icon: MessageSquareText },
     { href: '/student/settings', label: t('nav.settings'), icon: Settings },
   ]
 

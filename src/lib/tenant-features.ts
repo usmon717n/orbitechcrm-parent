@@ -22,6 +22,7 @@ export const DEFAULT_TENANT_FEATURES = {
   teacherTime: true,
   teacherTests: true,
   teacherNotifications: true,
+  teacherSupport: true,
   studentGroups: true,
   studentPayments: true,
   studentHomework: true,
@@ -29,6 +30,7 @@ export const DEFAULT_TENANT_FEATURES = {
   studentExtraLessons: true,
   studentNotifications: true,
   studentSchedule: true,
+  studentSupport: true,
 } as const
 
 export type TenantFeatures = { [K in keyof typeof DEFAULT_TENANT_FEATURES]: boolean }
@@ -72,6 +74,7 @@ export const TENANT_FEATURE_GROUPS: TenantFeatureGroup[] = [
       { key: 'teacherTime', label: 'Vaqt', description: "O'qituvchi vaqt/statistika bo'limini ko'radi" },
       { key: 'teacherTests', label: 'Testlar', description: "O'qituvchi test moduliga kiradi" },
       { key: 'teacherNotifications', label: 'Bildirishnomalar', description: "O'qituvchi xabarlar sahifasini ko'radi" },
+      { key: 'teacherSupport', label: 'Yordam', description: "O'qituvchi support sahifasini ko'radi" },
     ],
   },
   {
@@ -85,6 +88,7 @@ export const TENANT_FEATURE_GROUPS: TenantFeatureGroup[] = [
       { key: 'studentExtraLessons', label: "Qo'shimcha darslar", description: "O'quvchi extra lessons/testlar bo'limiga kiradi" },
       { key: 'studentNotifications', label: 'Bildirishnomalar', description: "O'quvchi xabarlar sahifasini ko'radi" },
       { key: 'studentSchedule', label: 'Dars jadvali', description: "O'quvchi dars jadvalini ko'radi" },
+      { key: 'studentSupport', label: 'Yordam', description: "O'quvchi support sahifasini ko'radi" },
     ],
   },
 ]
@@ -112,6 +116,7 @@ const ROUTE_FEATURES: Array<{ role: Role; prefix: string; feature: TenantFeature
   { role: 'TEACHER', prefix: '/teacher/time', feature: 'teacherTime' },
   { role: 'TEACHER', prefix: '/teacher/tests', feature: 'teacherTests' },
   { role: 'TEACHER', prefix: '/teacher/notifications', feature: 'teacherNotifications' },
+  { role: 'TEACHER', prefix: '/teacher/support', feature: 'teacherSupport' },
   { role: 'STUDENT', prefix: '/student/groups', feature: 'studentGroups' },
   { role: 'STUDENT', prefix: '/student/payments', feature: 'studentPayments' },
   { role: 'STUDENT', prefix: '/student/homework', feature: 'studentHomework' },
@@ -119,6 +124,7 @@ const ROUTE_FEATURES: Array<{ role: Role; prefix: string; feature: TenantFeature
   { role: 'STUDENT', prefix: '/student/extra', feature: 'studentExtraLessons' },
   { role: 'STUDENT', prefix: '/student/notifications', feature: 'studentNotifications' },
   { role: 'STUDENT', prefix: '/student/schedule', feature: 'studentSchedule' },
+  { role: 'STUDENT', prefix: '/student/support', feature: 'studentSupport' },
 ]
 
 export function normalizeTenantFeatures(raw?: Partial<Record<TenantFeatureKey, unknown>> | null): TenantFeatures {
