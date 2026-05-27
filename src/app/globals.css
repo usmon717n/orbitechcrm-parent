@@ -62,6 +62,54 @@
   --app-bg-soft: hsl(160, 20%, 96%);
   --app-bg-mist: hsl(184, 12%, 98%);
   --app-bg-wash: hsla(160, 84%, 39%, 0.075);
+
+  /* Premium glass toast tokens (consumed by react-hot-toast in layout.tsx) */
+  --toast-bg: rgba(255, 255, 255, 0.72);
+  --toast-border: rgba(15, 23, 42, 0.08);
+  --toast-text: #0f172a;
+  --toast-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.92) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+    0 12px 36px -8px rgba(15, 23, 42, 0.20),
+    0 32px 64px -16px var(--accent-glow-strong);
+}
+
+.dark {
+  --toast-bg: rgba(18, 14, 28, 0.68);
+  --toast-border: rgba(255, 255, 255, 0.08);
+  --toast-text: #f1f5f9;
+  --toast-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 12px 36px -8px rgba(0, 0, 0, 0.55),
+    0 32px 64px -16px var(--accent-glow-strong);
+}
+
+/* react-hot-toast premium glass overrides */
+.toast-premium {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+}
+.toast-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 38%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.dark .toast-premium::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 75%);
+}
+.toast-premium > * {
+  position: relative;
+  z-index: 1;
+}
+.toast-premium > div:first-child {
+  margin-right: 6px;
 }
 
 @layer base {

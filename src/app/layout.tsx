@@ -66,18 +66,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ToastSoundEffect />
         <Toaster
           position="top-center"
+          containerStyle={{ top: 'max(env(safe-area-inset-top), 16px)' }}
+          gutter={10}
           toastOptions={{
             duration: 3000,
+            className: 'toast-premium',
             style: {
-              background: 'var(--app-bg)',
-              border: '1px solid var(--accent-border)',
-              borderRadius: '14px',
-              boxShadow: '0 18px 42px var(--accent-glow)',
-              color: 'inherit',
+              background: 'var(--toast-bg)',
+              border: '1px solid var(--toast-border)',
+              borderRadius: '18px',
+              boxShadow: 'var(--toast-shadow)',
+              color: 'var(--toast-text)',
               fontSize: '14px',
-              maxWidth: '340px',
+              fontWeight: 600,
+              letterSpacing: '-0.012em',
+              padding: '13px 18px 13px 14px',
+              minHeight: '52px',
+              maxWidth: '420px',
             },
             success: {
+              iconTheme: {
+                primary: 'var(--accent)',
+                secondary: 'var(--accent-foreground)',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#ffffff',
+              },
+            },
+            loading: {
               iconTheme: {
                 primary: 'var(--accent)',
                 secondary: 'var(--accent-foreground)',
