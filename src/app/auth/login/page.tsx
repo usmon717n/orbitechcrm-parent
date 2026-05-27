@@ -3,9 +3,11 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useAuthStore, readAuthFromStorage } from '@/store/auth.store'
+import { useTenantStore } from '@/store/tenant.store'
 import { authApi } from '@/lib/api'
+import { buildCrossPanelHandoffUrl, THIS_PANEL_ROLE } from '@/lib/cross-panel-auth'
 import toast from 'react-hot-toast'
-import { Eye, EyeOff, Heart, Bell, CreditCard, TrendingUp, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Eye, EyeOff, Heart, Bell, CreditCard, TrendingUp, ArrowRight, CheckCircle2, Building2 } from 'lucide-react'
 import { useI18n } from '@/lib/i18n'
 
 export default function LoginPage() {
@@ -20,34 +22,56 @@ function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const setAuth = useAuthStore((s) => s.setAuth)
+  const activeSlug = useTenantStore((s) => s.activeSlug)
+  const setActiveSlug = useTenantStore((s) => s.setActiveSlug)
   const [ready, setReady] = useState(false)
+  const [tenantCode, setTenantCode] = useState('')
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
   const { t } = useI18n()
-  const tenantSlug = searchParams.get('tenant') ?? undefined
+  const urlTenant = searchParams.get('tenant') ?? ''
 
   useEffect(() => {
     const { user, isAuthenticated } = readAuthFromStorage()
-    if (isAuthenticated && user && user.role === 'PARENT') router.replace('/parent')
-    else setReady(true)
-  }, [router])
+    if (isAuthenticated && user && user.role === 'PARENT') {
+      router.replace('/parent')
+      return
+    }
+    setTenantCode((urlTenant || activeSlug || '').trim())
+    setReady(true)
+  }, [router, urlTenant, activeSlug])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const code = tenantCode.trim().toLowerCase()
+    if (!code) { toast.error("Markaz kodini kiriting"); return }
     if (!identifier.trim() || !password.trim()) { toast.error(t('login.fillAllFields')); return }
     setLoading(true)
     try {
-      const res = await authApi.login(identifier.trim(), password.trim(), tenantSlug)
+      const res = await authApi.login(identifier.trim(), password.trim(), code)
       const { access_token, refresh_token, user, tenant } = res.data
-      if (user.role !== 'PARENT') { toast.error("Bu panel faqat ota-onalar uchun"); setLoading(false); return }
+      setActiveSlug(code)
+      if (user.role !== THIS_PANEL_ROLE) {
+        const handoffUrl = buildCrossPanelHandoffUrl(user.role, { access_token, refresh_token, user, tenant })
+        if (handoffUrl) {
+          toast.success(`${user.role} paneliga yo'naltirilmoqda...`)
+          window.location.replace(handoffUrl)
+          return
+        }
+        toast.error("Sizning role'ingiz uchun panel topilmadi")
+        setLoading(false)
+        return
+      }
       setAuth(user, access_token, refresh_token, tenant ?? undefined)
       toast.success(`Xush kelibsiz, ${user.firstName}!`)
       router.replace('/parent')
     } catch (err: any) {
       const msg = err.response?.data?.message
-      toast.error(Array.isArray(msg) ? msg[0] : (msg || t('login.invalidCredentials')))
+      if (msg) toast.error(Array.isArray(msg) ? msg[0] : msg)
+      else if (!err.response) toast.error("Server bilan bog'lanib bo'lmadi (network/CORS xato)")
+      else toast.error(t('login.invalidCredentials'))
     } finally { setLoading(false) }
   }
 
@@ -156,16 +180,26 @@ function LoginContent() {
             <div className="mb-8">
               <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-1">Kirish</h2>
               <p className="text-sm text-slate-500 dark:text-slate-400">Ota-ona kabinetiga xush kelibsiz</p>
-              {tenantSlug && <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-semibold">{tenantSlug}</div>}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[13px] font-semibold text-slate-600 dark:text-slate-400 mb-2">Markaz kodi</label>
+                <div className="relative">
+                  <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white text-sm font-mono outline-none transition-all focus:border-orange-500 focus:ring-3 focus:ring-orange-500/15 placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                    type="text" placeholder="masalan: academy"
+                    value={tenantCode} autoFocus={!tenantCode} autoComplete="organization"
+                    onChange={e => setTenantCode(e.target.value)} />
+                </div>
+              </div>
               <div>
                 <label className="block text-[13px] font-semibold text-slate-600 dark:text-slate-400 mb-2">Email yoki telefon</label>
                 <input
                   className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-orange-500 focus:ring-3 focus:ring-orange-500/15 placeholder:text-slate-400 dark:placeholder:text-slate-600"
                   type="text" placeholder="parent@example.com"
-                  value={identifier} autoFocus autoComplete="username"
+                  value={identifier} autoFocus={!!tenantCode} autoComplete="username"
                   onChange={e => setIdentifier(e.target.value)} />
               </div>
               <div>
